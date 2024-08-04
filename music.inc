@@ -7,21 +7,22 @@ sub play_song(song$)
     play stop
     select case song$
         case "STAGE_INTRO"
-            play modfile "music/stage-intro.mod", 16000
+            play modfile "music/stage-intro.mod"', 16000
         case "BOSS_MOD"
-            play modfile "music/boss.mod", 16000
+            play modfile "music/boss.mod"', 16000
         case "DEMON_MOD"
-            play modfile "music/facing-the-demon.mod", 16000
+            play modfile "music/facing-the-demon.mod"', 16000
         case "MAJOU_MOD"
-            play modfile "music/majou-densetsu.mod", 16000
+            play modfile "music/majou-densetsu.mod"', 16000
         case "KNIGHTMARE_MOD"
-            play modfile "music/knightmare.mod", 16000
+            play modfile "music/knightmare.mod"', 16000
         case "SILENCE_MOD"
-            play modfile "music/silence.mod", 16000
+            play modfile "music/silence.mod"', 16000
     end select
 end sub
 
 sub play_sfx(sfx$)
+    Exit Sub : TODO
     if not g_sound_on or sfx$ = "" then exit sub
     select case sfx$
         case "BOSS_HIT"

@@ -716,7 +716,7 @@ sub destroy_all()
     for i%=0 to bound(g_actions_queue())
         g_actions_queue(i%, 0) = 0
     next
-    sprite close all()
+    sprite close all
 end sub
 
 sub kill_all_enemies(sfx%)
@@ -1150,6 +1150,7 @@ sub check_shield()
         case is <= 0
             g_player(5)=0
             g_player(6)=0
+            ? sprite(x, 2)
             if sprite(x, 2) <> 10000 then sprite hide safe 2
         case is <= SHIELD_MAX_HITS\6
             sprite read 2, OBJ_TILE%(36,0)+TILE_SIZEx4, OBJ_TILE%(36,1), OBJ_TILE%(36,2), OBJ_TILE%(36,3), OBJ_TILES_BUFFER

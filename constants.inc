@@ -1,14 +1,21 @@
-#define "MAP_TILESET_IMG", "tiles/maps.png"
-#define "OBJ_TILESET_IMG", "tiles/objects.png"
-#define "BOSS_TILESET_IMG", "tiles/bosses.png"
-#define "MAPS_DIR", "maps/"
+Const MAP_TILESET_IMG = "tiles/maps.png"
+Const OBJ_TILESET_IMG = "tiles/objects.png"
+Const BOSS_TILESET_IMG = "tiles/bosses.png"
+Const MAPS_DIR = "maps"
 
 const false=0
 const true=1
 const left=-1
 const right=1
 
-const KB_ESC=27
+' Used in a bitmask, values match MMBasic gamepad constants.
+const CTRL_FIRE = 8192
+const CTRL_UP = 128
+const CTRL_DOWN = 32
+const CTRL_LEFT = 256
+const CTRL_RIGHT = 64
+
+' const KB_ESC=27 ' This is unused
 const KB_SPACE=32
 const KB_UP=128
 const KB_DOWN=129

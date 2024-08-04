@@ -11,13 +11,13 @@ sub init_game()
     page write SPRITES_BUFFER: cls 0
 
     page write BOSS_TILES_BUFFER: cls 0
-    load png "BOSS_TILESET_IMG"
+    load png BOSS_TILESET_IMG
 
     page write MAP_TILES_BUFFER: cls 0
-    load png "MAP_TILESET_IMG"
+    load png MAP_TILESET_IMG
 
     page write OBJ_TILES_BUFFER: cls 0
-    load png "OBJ_TILESET_IMG"
+    load png OBJ_TILESET_IMG
 
     ' Interrupts
     sprite interrupt check_collision
@@ -54,9 +54,8 @@ sub init_stage()
     ' Initialize shield
     if g_player(6) > 0 then spawn_shield()
 
-    ' Initialize boss and kb flag
+    ' Initialize boss flag
     g_boss(0)=0
-    g_kb_released%=true
 
     ' Load and draw the map
     load_map(g_stage%)
