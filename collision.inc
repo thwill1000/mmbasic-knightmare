@@ -4,7 +4,12 @@ sub check_collision()
         process_collision(sprite(S))
     else
         for i% = 1 to sprite(C, 0)
-            on error skip
+            ' THW 1-Oct-2024: Commented out to find out what the error is.
+            '                 Note that if we do want to SKIP it then it should
+            '                 be ON ERROR SKIP 2 otherwise this will call
+            '                 process_collision() with spr_id% == 0, and 0 is
+            '                 an invalid sprite id.
+            ' on error skip
             spr_id%=sprite(C, 0, i%)
             process_collision(spr_id%)
         next
