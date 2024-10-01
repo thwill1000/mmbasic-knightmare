@@ -21,7 +21,7 @@ sub init_game()
 
     ' Interrupts
     sprite interrupt check_collision
-    gamepad on handle_gamepad
+    gamepad on
 end sub
 
 sub init_stage()
@@ -54,9 +54,8 @@ sub init_stage()
     ' Initialize shield
     if g_player(6) > 0 then spawn_shield()
 
-    ' Initialize boss and kb flag
+    ' Initialize boss flag
     g_boss(0)=0
-    g_kb_released%=true
 
     ' Load and draw the map
     load_map(g_stage%)

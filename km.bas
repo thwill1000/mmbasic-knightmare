@@ -82,8 +82,7 @@ sub run_stage()
         if g_freeze_timer < 0 and g_row% >= -1 and g_timer mod 16 = 0 then scroll_map()
 
         ' Process keyboard and game pad
-        process_kb()
-        process_gamepad()
+        process_input()
 
         ' Auto move player
         if g_player(8) = 3 then auto_move_player_to_portal()
@@ -138,57 +137,80 @@ sub run_stage()
     destroy_all()
 end sub
 
-sub process_kb()
+Sub process_input()
+    Static fire_down% = false
     if g_player(8) then exit sub
-
-    local kb1%=KeyDown(1), kb2%=KeyDown(2), kb3%=KeyDown(3)
-
     g_player_is_moving=false
+    Local ctrl% = read_keyboard%()
+    If Not ctrl% Then ctrl% = read_gamepad%()
+    If Not ctrl% Then fire_down% = false : Exit Sub
 
-    if not kb1% and not kb2% and not kb3% then
-        g_kb_released%=true
-        exit sub
-    end if
-
-    if g_kb_released% and (kb1%=KB_SPACE or kb2%=KB_SPACE or kb3%=KB_SPACE) then
+    If ctrl% And CTRL_FIRE Then
+      If Not fire_down% Then
         fire()
-        g_kb_released%=false
-    else if kb1%<>KB_SPACE and kb2%<>KB_SPACE and kb3%<>KB_SPACE then
-        g_kb_released%=true
-    end if
+        fire_down% = true
+      EndIf
+    Else
+      fire_down% = false
+    EndIf
 
-    if kb1%=KB_LEFT or kb2%=KB_LEFT or kb3%=KB_LEFT then
+    If ctrl% And CTRL_LEFT Then
         move_player(KB_LEFT)
-    else if kb1%=KB_RIGHT or kb2%=KB_RIGHT or kb3%=KB_RIGHT then
+    ElseIf ctrl% And CTRL_RIGHT Then
         move_player(KB_RIGHT)
-    end if
-
-    if kb1%=KB_UP or kb2%=KB_UP or kb3%=KB_UP then
+    EndIf
+    If ctrl% And CTRL_UP Then
         move_player(KB_UP)
-    else if kb1%=KB_DOWN or kb2%=KB_DOWN or kb3%=KB_DOWN then
+    ElseIf ctrl% And CTRL_DOWN Then
         move_player(KB_DOWN)
-    end if
-end sub
+    EndIf
+End Sub
 
-sub process_gamepad()
-    if g_player(8) or not g_gamepad% then exit sub
+Function read_keyboard%()
+  If Not KeyDown(0) Then Exit Function
+  Local i%
+  For i% = 1 To 3
+    Select Case KeyDown(i%)
+      Case KB_UP
+        read_keyboard% = read_keyboard% Or CTRL_UP
+      Case KB_DOWN
+        read_keyboard% = read_keyboard% Or CTRL_DOWN
+      Case KB_LEFT
+        read_keyboard% = read_keyboard% Or CTRL_LEFT
+      Case KB_RIGHT
+        read_keyboard% = read_keyboard% Or CTRL_RIGHT
+      Case KB_SPACE
+        read_keyboard% = read_keyboard% Or CTRL_FIRE
+    End Select
+  Next
+End Function
 
-    local dig_pos=gamepad(LY)
-    if g_gamepad% and 128 or (dig_pos >= 0 and dig_pos < 124) then move_player(KB_UP)
-    if g_gamepad% and 32  or dig_pos > 130 then move_player(KB_DOWN)
+Function read_gamepad%()
+  Local g% = gamepad(B)
 
-    dig_pos=gamepad(LX)
-    if g_gamepad% and 256 or (dig_pos >= 0 and dig_pos < 124) then move_player(KB_LEFT)
-    if g_gamepad% and 64  or dig_pos > 130 then move_player(KB_RIGHT)
+  If Not (g% And 480) Then
+    ' No digital direction buttons down so check left-stick.
+    Select Case gamepad(LX)
+      Case < 124: g% = g% Or 256
+      Case > 132: g% = g% Or 64
+    End Select
+    Select Case gamepad(LY)
+      Case < 124: g% = g% Or 128
+      Case > 132: g% = g% Or 32
+    End Select
+  EndIf
 
-    if g_gamepad% and 8192 then
-        if g_gp_released% then fire()
-        g_gp_released%=false
-    else if not (g_gamepad% and 8192) then
-        g_gp_released%=true
-    end if
-end sub
+  If g% And 32 Then
+    read_gamepad% = read_gamepad% Or CTRL_DOWN
+  ElseIf g% And 128 Then
+    read_gamepad% = read_gamepad% Or CTRL_UP
+  EndIf
 
-sub handle_gamepad()
-    g_gamepad%=gamepad(B)
-end sub
+  If g% And 256 Then
+    read_gamepad% = read_gamepad% Or CTRL_LEFT
+  ElseIf g% And 64 Then
+    read_gamepad% = read_gamepad% Or CTRL_RIGHT
+  EndIf
+
+  If (g% And 8192) > 0 Then read_gamepad% = read_gamepad% Or CTRL_FIRE
+End Function
