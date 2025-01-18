@@ -26,7 +26,7 @@ On Key 3, end_game()
 init_game()
 
 If Mm.Info(Device X) = "MMB4L" Then
-    Graphics Title 0, "Knightmare for MMBasic, v0.1.0"
+    Graphics Title 0, "Knightmare for MMBasic, v0.7.0"
     Graphics Interrupt 0, on_window_event
 EndIf
 
